@@ -15,21 +15,7 @@ pub fn parse(input: &str) -> Vec<Vec<isize>> {
 
 #[aoc(day2, part1)]
 pub fn part1(input: &Vec<Vec<isize>>) -> usize {
-    input
-        .iter()
-        .filter(|report| {
-            let inc = report[0] < report[1];
-            for i in 1..report.len() {
-                if (report[i - 1] < report[i]) != inc
-                    || (report[i - 1] - report[i]).abs() > 3
-                    || report[i - 1] - report[i] == 0
-                {
-                    return false;
-                }
-            }
-            true
-        })
-        .count()
+    input.iter().filter(|report| is_safe(report.iter())).count()
 }
 
 #[aoc(day2, part2)]
@@ -37,29 +23,46 @@ pub fn part2(input: &Vec<Vec<isize>>) -> usize {
     input
         .iter()
         .filter(|report| {
-            let mut seen_good = false;
+            if is_safe(report.iter()) {
+                return true;
+            }
 
             for i in 0..report.len() {
-                let mut report2 = report[0..i].to_vec();
-                report2.append(&mut report[i + 1..report.len()].to_vec());
+                let removed = report[0..i]
+                    .iter()
+                    .chain(report[i + 1..report.len()].iter());
 
-                let mut seen_bad = false;
-
-                let inc = report2[0] < report2[1];
-                for i in 1..report2.len() {
-                    if (report2[i - 1] < report2[i]) != inc
-                        || (report2[i - 1] - report2[i]).abs() > 3
-                        || report2[i - 1] - report2[i] == 0
-                    {
-                        seen_bad = true;
-                    }
-                }
-                if !seen_bad {
-                    seen_good = true;
+                if is_safe(removed) {
+                    return true;
                 }
             }
 
-            seen_good
+            false
         })
         .count()
+}
+
+fn is_safe<'a>(mut report: impl Iterator<Item = &'a isize>) -> bool {
+    let mut prev = report.next().unwrap();
+
+    let head = report.next().unwrap();
+    let inc = prev < head;
+
+    if !within_range(*prev, *head) {
+        return false;
+    }
+
+    prev = head;
+
+    report.all(|x| {
+        let mut safe = true;
+        safe = safe && ((prev < x) == inc);
+        safe = safe && within_range(*prev, *x);
+        prev = x;
+        safe
+    })
+}
+
+fn within_range(a: isize, b: isize) -> bool {
+    (0 != a - b) && (a - b).abs() <= 3
 }
