@@ -2,8 +2,8 @@ use std::{collections::HashMap, iter::zip};
 
 #[aoc_generator(day1)]
 pub fn parse(input: &str) -> (Vec<i64>, Vec<i64>) {
-    let mut left = vec![];
-    let mut right = vec![];
+    let mut left = Vec::with_capacity(1000);
+    let mut right = Vec::with_capacity(1000);
 
     let mut next_left = true;
     for s in input.split_whitespace() {

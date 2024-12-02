@@ -1,9 +1,12 @@
 #[aoc_generator(day2)]
 pub fn parse(input: &str) -> Vec<Vec<isize>> {
-    let mut result = vec![];
+    let mut result = Vec::with_capacity(1000);
 
     for x in input.lines() {
-        result.push(x.split(' ').map(|y| y.parse().unwrap()).collect())
+        let mut report = Vec::with_capacity(8);
+        report.extend(x.split(' ').map(|y| y.parse::<isize>().unwrap()));
+
+        result.push(report);
     }
 
     result
