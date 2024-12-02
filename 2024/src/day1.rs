@@ -54,16 +54,9 @@ pub fn part2(input: &(Vec<i64>, Vec<i64>)) -> i64 {
         }
     }
 
-    let mut acc = 0;
-
-    for x in left {
-        match freqs.get(&x) {
-            Some(freq) => {
-                acc += x * freq;
-            }
-            None => {}
-        }
-    }
-
-    acc
+    left.iter()
+        .map(|x| freqs.get(&x).map(|y| (x, y)))
+        .flatten()
+        .map(|(x, y)| x * y)
+        .sum()
 }
