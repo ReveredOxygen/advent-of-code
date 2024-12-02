@@ -22,10 +22,6 @@ pub fn part2(input: &Vec<Vec<isize>>) -> usize {
     input
         .iter()
         .filter(|report| {
-            if is_safe(report.iter()) {
-                return true;
-            }
-
             for i in 0..report.len() {
                 let removed = report[0..i]
                     .iter()
