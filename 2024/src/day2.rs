@@ -3,11 +3,7 @@ pub fn parse(input: &str) -> Vec<Vec<isize>> {
     let mut result = vec![];
 
     for x in input.lines() {
-        result.push(
-            x.split_ascii_whitespace()
-                .map(|y| y.parse().unwrap())
-                .collect(),
-        )
+        result.push(x.split(' ').map(|y| y.parse().unwrap()).collect())
     }
 
     result

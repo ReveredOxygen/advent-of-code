@@ -8,9 +8,9 @@ pub fn parse(input: &str) -> (Vec<i64>, Vec<i64>) {
     let mut next_left = true;
     for s in input.split_whitespace() {
         if next_left {
-            left.push(s.parse::<i64>().unwrap());
+            left.push(s.parse().unwrap());
         } else {
-            right.push(s.parse::<i64>().unwrap());
+            right.push(s.parse().unwrap());
         }
 
         next_left = !next_left;
