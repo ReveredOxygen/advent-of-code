@@ -1,9 +1,9 @@
 use aoc_runner_derive::aoc;
-use regex::Regex;
+use lazy_regex::regex;
 
 #[aoc(day3, part1)]
 fn part1(input: &str) -> i64 {
-    let re = Regex::new(r#"mul\((?<d1>\d+),(?<d2>\d+)\)"#).unwrap();
+    let re = regex!(r#"mul\((?<d1>\d+),(?<d2>\d+)\)"#);
 
     let mut acc = 0;
 
@@ -16,7 +16,7 @@ fn part1(input: &str) -> i64 {
 
 #[aoc(day3, part2)]
 fn part2(input: &str) -> i64 {
-    let re = Regex::new(r#"(?<tog>do(n't)?\(\))|(mul\((?<d1>\d+),(?<d2>\d+)\))"#).unwrap();
+    let re = regex!(r#"(?<tog>do(n't)?\(\))|(mul\((?<d1>\d+),(?<d2>\d+)\))"#);
 
     let mut acc = 0;
     let mut mul = true;
