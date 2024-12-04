@@ -1,4 +1,4 @@
-use std::{collections::HashMap, iter::zip};
+use std::collections::HashMap;
 
 #[aoc_generator(day1)]
 pub fn parse(input: &str) -> (Vec<i64>, Vec<i64>) {
@@ -27,12 +27,35 @@ pub fn part1(input: &(Vec<i64>, Vec<i64>)) -> i64 {
     left.sort();
     right.sort();
 
-    let mut acc = 0;
-    for x in zip(left, right) {
-        acc += (x.0 - x.1).abs();
+    let mut differences = [0; 1000];
+    abs_diff(left.as_slice(), right.as_slice(), &mut differences);
+
+    differences.iter().sum()
+}
+
+fn abs_diff(a: &[i64], b: &[i64], c: &mut [i64]) {
+    #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+    {
+        // Note that this `unsafe` block is safe because we're testing
+        // that the `avx2` feature is indeed available on our CPU.
+        if is_x86_feature_detected!("avx2") {
+            return unsafe { abs_diff_avx2(a, b, c) };
+        }
     }
 
-    acc
+    abs_diff_fallback(a, b, c)
+}
+
+#[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+#[target_feature(enable = "avx2")]
+unsafe fn abs_diff_avx2(a: &[i64], b: &[i64], c: &mut [i64]) {
+    abs_diff_fallback(a, b, c) // the function below is inlined here
+}
+
+fn abs_diff_fallback(a: &[i64], b: &[i64], c: &mut [i64]) {
+    for ((a, b), c) in a.iter().zip(b).zip(c) {
+        *c = (*a - *b).abs();
+    }
 }
 
 #[aoc(day1, part2)]
