@@ -1,7 +1,11 @@
+use arrayvec::ArrayVec;
+
+const NUM_ELEMS: usize = 1000;
+
 #[aoc_generator(day1)]
-pub fn parse(input: &str) -> (Vec<i64>, Vec<i64>) {
-    let mut left = Vec::with_capacity(1000);
-    let mut right = Vec::with_capacity(1000);
+pub fn parse(input: &str) -> (ArrayVec<i32, NUM_ELEMS>, ArrayVec<i32, NUM_ELEMS>) {
+    let mut left = ArrayVec::new();
+    let mut right = ArrayVec::new();
 
     let mut next_left = true;
     for s in input.split_whitespace() {
@@ -18,7 +22,7 @@ pub fn parse(input: &str) -> (Vec<i64>, Vec<i64>) {
 }
 
 #[aoc(day1, part1)]
-pub fn part1(input: &(Vec<i64>, Vec<i64>)) -> i64 {
+pub fn part1(input: &(ArrayVec<i32, NUM_ELEMS>, ArrayVec<i32, NUM_ELEMS>)) -> i32 {
     let mut left = input.0.clone();
     let mut right = input.1.clone();
 
@@ -31,7 +35,7 @@ pub fn part1(input: &(Vec<i64>, Vec<i64>)) -> i64 {
     differences.iter().sum()
 }
 
-fn abs_diff(a: &[i64], b: &[i64], c: &mut [i64]) {
+fn abs_diff(a: &[i32], b: &[i32], c: &mut [i32]) {
     #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
     {
         // Note that this `unsafe` block is safe because we're testing
@@ -46,26 +50,26 @@ fn abs_diff(a: &[i64], b: &[i64], c: &mut [i64]) {
 
 #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
 #[target_feature(enable = "avx2")]
-unsafe fn abs_diff_avx2(a: &[i64], b: &[i64], c: &mut [i64]) {
+unsafe fn abs_diff_avx2(a: &[i32], b: &[i32], c: &mut [i32]) {
     abs_diff_fallback(a, b, c) // the function below is inlined here
 }
 
-fn abs_diff_fallback(a: &[i64], b: &[i64], c: &mut [i64]) {
+fn abs_diff_fallback(a: &[i32], b: &[i32], c: &mut [i32]) {
     for ((a, b), c) in a.iter().zip(b).zip(c) {
         *c = (*a - *b).abs();
     }
 }
 
 #[aoc(day1, part2)]
-pub fn part2(input: &(Vec<i64>, Vec<i64>)) -> i64 {
+pub fn part2(input: &(ArrayVec<i32, NUM_ELEMS>, ArrayVec<i32, NUM_ELEMS>)) -> i32 {
     let left = &input.0;
     let right = &input.1;
 
-    let mut freqs: [u8; 99999] = [0; 99999];
+    let mut freqs: [u8; 100000] = [0; 100000];
 
     for x in right {
         freqs[*x as usize] += 1;
     }
 
-    left.iter().map(|x| x * freqs[*x as usize] as i64).sum()
+    left.iter().map(|x| x * freqs[*x as usize] as i32).sum()
 }

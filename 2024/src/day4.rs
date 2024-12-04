@@ -1,8 +1,11 @@
+use arrayvec::ArrayVec;
 use core::str;
+
+type Input = ArrayVec<ArrayVec<u8, 140>, 140>;
 
 use aoc_runner_derive::{aoc, aoc_generator};
 #[aoc_generator(day4)]
-fn parse(input: &str) -> Vec<Vec<u8>> {
+fn parse(input: &str) -> Input {
     input
         .lines()
         .map(|l| l.as_bytes().iter().map(|x| x.clone()).collect())
@@ -10,7 +13,7 @@ fn parse(input: &str) -> Vec<Vec<u8>> {
 }
 
 #[aoc(day4, part1)]
-fn part1(input: &[Vec<u8>]) -> usize {
+fn part1(input: &Input) -> usize {
     let max_i = input.len() - 3;
     let max_j = input[0].len() - 3;
 
@@ -83,7 +86,7 @@ fn part1(input: &[Vec<u8>]) -> usize {
 }
 
 #[aoc(day4, part2)]
-fn part2(input: &[Vec<u8>]) -> usize {
+fn part2(input: &Input) -> usize {
     let mut num_xmas = 0;
 
     for i in 1..input.len() - 1 {
