@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 #[aoc_generator(day1)]
 pub fn parse(input: &str) -> (Vec<i64>, Vec<i64>) {
     let mut left = Vec::with_capacity(1000);
@@ -63,23 +61,11 @@ pub fn part2(input: &(Vec<i64>, Vec<i64>)) -> i64 {
     let left = &input.0;
     let right = &input.1;
 
-    let mut freqs = HashMap::new();
+    let mut freqs: [u8; 99999] = [0; 99999];
 
     for x in right {
-        let freq = freqs.get_mut(&x);
-        match freq {
-            Some(f) => {
-                *f += 1;
-            }
-            None => {
-                freqs.insert(x, 1);
-            }
-        }
+        freqs[*x as usize] += 1;
     }
 
-    left.iter()
-        .map(|x| freqs.get(&x).map(|y| (x, y)))
-        .flatten()
-        .map(|(x, y)| x * y)
-        .sum()
+    left.iter().map(|x| x * freqs[*x as usize] as i64).sum()
 }
