@@ -1,10 +1,10 @@
 #[aoc_generator(day2)]
-pub fn parse(input: &str) -> Vec<Vec<isize>> {
+pub fn parse(input: &str) -> Vec<Vec<i8>> {
     let mut result = Vec::with_capacity(1000);
 
     for x in input.lines() {
         let mut report = Vec::with_capacity(8);
-        report.extend(x.split(' ').map(|y| y.parse::<isize>().unwrap()));
+        report.extend(x.split(' ').map(|y| y.parse::<i8>().unwrap()));
 
         result.push(report);
     }
@@ -13,12 +13,12 @@ pub fn parse(input: &str) -> Vec<Vec<isize>> {
 }
 
 #[aoc(day2, part1)]
-pub fn part1(input: &Vec<Vec<isize>>) -> usize {
+pub fn part1(input: &Vec<Vec<i8>>) -> usize {
     input.iter().filter(|report| is_safe(report.iter())).count()
 }
 
 #[aoc(day2, part2)]
-pub fn part2(input: &Vec<Vec<isize>>) -> usize {
+pub fn part2(input: &Vec<Vec<i8>>) -> usize {
     input
         .iter()
         .filter(|report| {
@@ -37,7 +37,7 @@ pub fn part2(input: &Vec<Vec<isize>>) -> usize {
         .count()
 }
 
-fn is_safe<'a>(mut report: impl Iterator<Item = &'a isize>) -> bool {
+fn is_safe<'a>(mut report: impl Iterator<Item = &'a i8>) -> bool {
     let mut prev = report.next().unwrap();
 
     let head = report.next().unwrap();
@@ -58,6 +58,6 @@ fn is_safe<'a>(mut report: impl Iterator<Item = &'a isize>) -> bool {
     })
 }
 
-fn within_range(a: isize, b: isize) -> bool {
+fn within_range(a: i8, b: i8) -> bool {
     (0 != a - b) && (a - b).abs() <= 3
 }
