@@ -68,8 +68,10 @@ pub fn part2(input: &(ArrayVec<i32, NUM_ELEMS>, ArrayVec<i32, NUM_ELEMS>)) -> i3
     let mut freqs: [u8; 100000] = [0; 100000];
 
     for x in right {
-        freqs[*x as usize] += 1;
+        unsafe { *freqs.get_unchecked_mut(*x as usize) += 1 }
     }
 
-    left.iter().map(|x| x * freqs[*x as usize] as i32).sum()
+    left.iter()
+        .map(|x| x * unsafe { *freqs.get_unchecked(*x as usize) as i32 })
+        .sum()
 }
