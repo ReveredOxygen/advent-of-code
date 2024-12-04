@@ -21,6 +21,10 @@ fn part1(input: &Input) -> usize {
 
     for i in 0..input.len() {
         for j in 0..input[0].len() {
+            if input[i][j] != b'X' && input[i][j] != b'S' {
+                continue;
+            }
+
             if j < max_j && &input[i][j..j + 4] == b"XMAS" {
                 num_xmas += 1;
             }
