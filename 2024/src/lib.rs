@@ -10,5 +10,7 @@ pub mod day4;
 pub mod day5;
 //
 pub mod day17;
+//
+pub mod day22;
 
 aoc_lib! { year = 2024 }
